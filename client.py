@@ -2,14 +2,15 @@
 import socket
 import sys
 
-
-HOST = "192.168.1.5"
-PORT = 12345
+HOST = sys.argv[1]
+PORT = sys.argv[2]
 
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-	s.connect((HOST, PORT))
-	message = "GET /HelloWorld.html HTTP/1.1\nHost: 192.168.1.5\n\n"
-	s.sendall(str.encode(message))
-	data = s.recv(1024)
-	print('Received message from', (data.decode()))
+	s.connect((HOST, int(PORT)))
+	message = "GET /" + sys.argv[3] + " HTTP/1.0\nHost: " + HOST + "\r\n"
+	s.sendall(message.encode())
+	data = s.recv(4096)
+	print(data.decode())
+	data = s.recv(4096)
+	print(data.decode())
 	s.close()
